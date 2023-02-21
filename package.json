@@ -1,0 +1,36 @@
+{
+  "name": "recordaudiowidget",
+  "widgetName": "RecordAudioWidget",
+  "version": "1.0.0",
+  "description": "Record and save audio",
+  "copyright": "2020 BYU",
+  "author": "Lauren Anderson",
+  "config": {
+    "projectPath": "../..//",
+    "mendixHost": "http://localhost:8080",
+    "developmentPort": "3000"
+  },
+  "packagePath": "byu",
+  "scripts": {
+    "start": "pluggable-widgets-tools start:server --open",
+    "dev": "pluggable-widgets-tools start:web",
+    "build": "pluggable-widgets-tools build:web",
+    "lint": "pluggable-widgets-tools lint",
+    "lint:fix": "pluggable-widgets-tools lint:fix",
+    "prerelease": "npm run lint",
+    "release": "pluggable-widgets-tools release:web"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@mendix/pluggable-widgets-tools": "^8.12.0",
+    "@types/big.js": "^4.0.5",
+    "@types/classnames": "^2.2.4",
+    "@types/dom-mediacapture-record": "^1.0.7",
+    "@types/react": "~16.9.0",
+    "@types/react-dom": "~16.9.0"
+  },
+  "dependencies": {
+    "@jeltemx/mendix-react-widget-utils": "^0.7.0",
+    "classnames": "^2.2.6"
+  }
+}

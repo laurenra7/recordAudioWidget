@@ -1,0 +1,165 @@
+/*
+Place your custom CSS here
+*/
+
+.not-supported {
+    color: red;
+    font-style: italic;
+}
+
+.outer-container {
+    font-family: "HCo Ringside Narrow SSm",Arial,sans-serif;
+}
+
+.instructions {
+    margin-top: 20px;
+    padding-top: 10px;
+    border: 1px solid rgb(204, 204, 204);
+    background-color: lightyellow;
+}
+
+.instructions li {
+    padding-top: 10px;
+}
+
+.widget-record-audio {
+    width: 484px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+    /*border: 1px solid mediumseagreen;*/
+}
+
+.widget-play-audio-show {
+    display: flex;
+    margin: 12px 0 0 0;
+}
+
+.widget-play-audio-hide {
+    display: none;
+    margin: 12px 0 0 0;
+}
+
+.btn-all {
+    margin: 12px 12px 0 0;
+    padding-top: 4px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgb(204, 204, 204);
+}
+
+.btn-icon {
+    width: 30px;
+}
+
+.btn-download {
+    margin-left: 12px;
+    padding: 5px 7px;
+    background-color: rgb(239, 239, 239);
+    cursor: pointer;
+    display: flex;
+}
+
+.btn-hide {
+    display: none;
+}
+
+.btn-enabled:hover, .btn-enabled:focus, .btn-download:hover, .btn-download:focus {
+    background-color: rgb( 215, 215, 215);
+}
+
+.btn-disabled:hover, .btn-disabled:focus {
+    background-color: rgb( 170, 170, 170);
+}
+
+.btn-record-circle {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin: -2px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+.btn-record-circle-disabled {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin: -2px;
+    background-color: rgb(170, 170, 170);
+    border-radius: 50%;
+}
+
+.btn-record-circle-small {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: -2px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+.btn-record {
+    width: 30px;
+}
+
+.btn-pause {
+    color: red;
+}
+
+.btn-color-red {
+    color: red;
+}
+
+.btn-color-black {
+    color: black;
+}
+
+
+.btn-stop {
+    color: black;
+}
+
+.btn-play {
+    color: black;
+}
+
+.btn-color-grey {
+    color: rgb(170, 170, 170);
+}
+
+.audio-player {
+    height: 32px;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 16px;
+}
+
+.tooltip {
+    position: relative;
+    border-bottom: 1px dashed black;
+}
+
+/* Customize the look of the <audio> tag widget in Chromium browsers. */
+/*.widget-play-audio-show audio::-webkit-media-controls-panel, video::-webkit-media-controls-panel {*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*    align-items: center;*/
+/*    !* We use flex-start here to ensure that the play button is visible even*/
+/*     * if we are too small to show all controls.*/
+/*     *!*/
+/*    justify-content: flex-start;*/
+/*    -webkit-user-select: none;*/
+/*    position: relative;*/
+/*    width: 100%;*/
+/*    z-index: 0;*/
+/*    overflow: hidden;*/
+/*    text-align: right;*/
+/*    bottom: auto;*/
+/*    height: 30px;*/
+/*    background-color: rgba(239, 239, 239, 0.8);*/
+/*    border: 1px solid rgb(204, 204, 204);*/
+/*    border-radius: 0px;*/
+/*    !* The duration is also specified in MediaControlElements.cpp and LayoutTests/media/media-controls.js *!*/
+/*    transition: opacity 0.3s;*/
+/*}*/

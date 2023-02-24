@@ -9,7 +9,7 @@ Built to run on Mendix version 9.18.2
 - Download the .weba file of the audio 
 - *And pass the audio into your Mendix application*
 
-## Usage
+## Setting Up
 ### To add the widget to your project
 1. Download this repository
 2. Move the file `byu.RecordAudioWidget.mpk` to your Mendix application's `widgets` folder
@@ -59,11 +59,18 @@ These are the required settings of the widget you will need to set in order to u
 
 ![img_3.png](readme_images/img_3.png)
 
+## User Interaction
+Once you have the widget set up, it should look like this on the web page.
+As noted above, you can customize the end of step 3 with your own description. 
+Or you can hide the instructions panel entirely.
+
+![img_5.png](readme_images/img_5.png)
+
 ## Demo project
 [link to sandbox]
 
 ## Issues, suggestions and feature requests
-[link to GitHub issues]
+[Issues Page](https://github.com/laurenra7/recordAudioWidget/issues)
 
 ## Development and contribution
 [specify contribute]

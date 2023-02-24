@@ -2,6 +2,7 @@
   "extends": "./node_modules/@mendix/pluggable-widgets-tools/configs/tsconfig.base.json",
   "compilerOptions": {
     "noUnusedLocals": false,
-    "types": ["node", "dom-mediacapture-record"]
+    "types": ["node", "dom-mediacapture-record", "mendix-client"],
+        "lib": ["es2017", "dom"]
   }
 }

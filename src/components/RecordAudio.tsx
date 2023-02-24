@@ -1,10 +1,4 @@
 import { CSSProperties, Component, ReactNode, createElement } from "react";
-// import classNames from "classnames";
-// import { ButtonRecord } from "./ButtonRecord";
-// import {ButtonPause} from "./ButtonPause";
-// import { MediaRecorder } from "dom-mediacapture-record";
-import { DynamicValue, FileValue } from "mendix";
-// import { saveDocument } from "@jeltemx/mendix-react-widget-utils/lib/documents";
 
 export interface RecordAudioProps {
     fileUrl?: (value: string) => void;
@@ -17,6 +11,10 @@ export interface RecordAudioProps {
     hasError?: boolean;
     required?: boolean;
     disabled?: boolean;
+    showInstructs?: boolean;
+    locationVal?: string;
+    microflowString?: string;
+    entityString?: string;
 }
 
 export interface RecordAudioState {
@@ -29,20 +27,12 @@ export interface RecordAudioState {
     isRecordButtonsEnabled: boolean;
     mediaRecorder?: MediaRecorder;
     audioUrl?: string;
+    audioBlob?: Blob;
 }
 
 export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
 
     static mimeType: string = 'audio/webm;codecs=opus';
-    static defaultProps: RecordAudioProps = {
-        testStuff: 'nothing input'
-    };
-
-    /* Normally this is a good way to initialize state unless they are dependent on the results of other code. */
-    // state: Readonly<RecordAudioState> = {
-    //     isRecordingSupported: false,
-    //     isRecording: false
-    // };
 
     /**
      * Check to see if browser supports getUserMedia for recording before doing anything else.
@@ -77,24 +67,13 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         }
         /* Set defaults for state variables */
         this.state = {
-            // micList: [deviceList],
-            // micList: {...deviceList},
-            // micList: [ ...deviceList ],
-            // micList: [ this.state.micList, ...deviceList],
-            // micList: [ ...this.state.micList, deviceList],
             isRecordingSupported: isRecordingSupported,
             isRecordingStarted: false,
             isRecording: false,
             isPaused: false,
             isDone: false,
-            isRecordButtonsEnabled: true
+            isRecordButtonsEnabled: true,
         };
-
-        // this.setState(prevState => ({
-        //     itemList: prevState.itemList.map(
-        //         obj => (obj.)
-        //     )
-        // }));
     }
 
     startRecording = () => {
@@ -136,7 +115,7 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                             /* Collect audio chunks into a Blob, create URL for it, update state. */
                             const audioBlob = new Blob(audioChunks, {'type' : RecordAudio.mimeType});
                             const audioUrl = URL.createObjectURL(audioBlob);
-                            this.setState( { audioUrl: audioUrl, isRecording: false, isDone: true });
+                            this.setState( { audioUrl: audioUrl, audioBlob: audioBlob, isRecording: false, isDone: true });
 
                             /* Update audioFileUrl attribute with the Blob URL */
                             if (this.props.fileUrl) {
@@ -183,14 +162,62 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         }
     };
 
-    // downloadRecording = () => {
-    //     setTimeout(() => {
-    //         if (this.state.audioUrl) {
-    //             URL.revokeObjectURL(this.state.audioUrl);
-    //             removeEventListener('click', this.downloadRecording);
-    //         }
-    //     }, 150);
-    // };
+    saveRecording = () => {
+        const audioBlob = this.state.audioBlob;
+        const microFlowName = this.props.microflowString!;
+        const entityName = this.props.entityString!;
+
+        mx.data.create({
+            entity: entityName,
+            callback : function (obj) {
+                obj.set("Name", "recording.weba");
+
+                mx.data.saveDocument(
+                    obj.toString(),
+                    "new_audio.weba",
+                    {},
+                    audioBlob as Blob,
+                    function (){
+                        mx.data.action({
+                            params: {
+                                applyto: "selection",
+                                actionname: microFlowName,
+                                guids: [obj.toString()]
+                            },
+                            callback: function (){},    // Success
+
+                            error: function(error) {
+                                /* Error in microflow call
+                                Likely an incorrect Microflow name listed in widget options, check microflowName variable */
+                                alert(`Error attempting to save audio.\nContact app support.\n\n (1) ${error}`)
+                                mx.data.remove({
+                                    guid: obj.toString(),
+                                    callback: function () {},   // Success
+                                    error: function () {}       // Error deleting object
+                                })
+
+                            }
+                        });
+                    },
+                    function (error) {
+                        // Error in save document call
+                        alert(`Error attempting to save audio.\nContact app support\n\n (2) ${error}`)
+                        mx.data.remove({
+                            guid: obj.toString(),
+                            callback: function () {},       // Success
+                            error: function () {}           // Error deleting object
+                        })
+
+                    }
+                )
+            },
+            error: function (error) {
+                // Error in create entity call
+                // Likely an incorrect entity name listed in widget options, check entityName variable
+                alert(`Error creating audio file.\nContact app support.\n\n (3) ${error}`)
+            }
+        })
+    };
 
     deleteRecording = () => {
         if (this.state.audioUrl) {
@@ -215,6 +242,7 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         const isRecordButtonsEnabled = this.state.isRecordButtonsEnabled;
         const isRecording = this.state.isRecording;
         const isDone = this.state.isDone;
+        const showInstructions = true;
         return !isRecordingSupported ? <div className="not-supported">Recording not supported in this browser.</div> :
             <div className="outer-container">
                 <div className="widget-record-audio">
@@ -247,72 +275,33 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                             Your browser does not support the <code>audio</code> element.
                         </audio>
                     </div>
-                    <a href={this.state.audioUrl}
-                       download="recording.weba"
-                       className={ isDone ? "btn-download btn-color-black btn-all" : "btn-hide" }
-                    >
-                        <span className="glyphicon glyphicon-download-alt"></span>
-                    </a>
-                    <button type="button"
-                            disabled={!isDone}
-                            className={ isDone ? "btn-color-black btn-all btn-icon btn-enabled" : "btn-hide" }
-                            onClick={this.deleteRecording}
-                    >
-                        <span className="glyphicon glyphicon-remove"></span>
-                    </button>
+                    <div style={ { "margin" : "0px 0px 0px 15px"} }>
+                        <button type="button"
+                                disabled={!isDone}
+                                className={ isDone ? "btn-color-black btn-all btn-icon btn-enabled" : "btn-hide" }
+                                onClick={this.saveRecording}
+                        >
+                            <span className="glyphicon glyphicon-plus" ></span>
+                        </button>
+                        <button type="button"
+                                disabled={!isDone}
+                                className={ isDone ? "btn-color-black btn-all btn-icon btn-enabled" : "btn-hide" }
+                                onClick={this.deleteRecording}
+                        >
+                            <span className="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </div>
+
                 </div>
-                <div className="instructions">
+                <div className="instructions" style={ { display : this.props.showInstructs ? "block" : "none" }}>
                     <ol>
                         <li>Press <span className="btn-record-circle-small" style={ { margin: "-1px 2px" } }></span> to record a message.
                             You can press <span className="glyphicon glyphicon-pause" style={ { color: "red" } }></span> to pause.</li>
                         <li>Press <span className="glyphicon glyphicon-stop"></span> to stop. You can press <span className="glyphicon glyphicon-play"></span> to review it.</li>
-                        <li>Press <span className="glyphicon glyphicon-download-alt"></span> to download recording and save it.</li>
-                        <li>Select <span className="glyphicon glyphicon-plus" style={ {color: "rgb(0, 98, 184)"} }></span>
-                            <span style={ {color: "rgb(0, 98, 184)"} }>Upload Audio Message from File</span> to upload it.</li>
-                        <li>To start a new recording, delete the old one with <span className="glyphicon glyphicon-remove"></span>.</li>
+                        <li>Press <span className="glyphicon glyphicon-plus" style={ { margin: "0px 0px 10px 0px" } }></span> to name the audio and save it to {this.props.locationVal}.</li>
                     </ol>
+                    <span style={ { margin : "0px 0px 15px 15px"} }>Or press <span className="glyphicon glyphicon-remove"></span> to delete the current recording and start a new one.</span>
                 </div>
             </div>
     }
 }
-
-
-// <a href={this.state.audioUrl}
-//    download="recording.weba"
-//    className={ isDone ? "btn-download btn-color-black btn-all" : "btn-download-hide" }
-//    onClick={this.downloadRecording}>
-//     <span className="glyphicon glyphicon-download-alt"></span>
-// </a>
-
-
-// <div>
-//     <button type="button"
-//             disabled={!isRecordingSupported}
-//             className={ isRecordingSupported ? "btn-color-black btn-all btn-enabled" : "btn-color-grey btn-all" }
-//             onClick={this.downloadTest}>
-//         Download
-//     </button>
-//     <button type="button"
-//             disabled={!isRecordingSupported}
-//             className={ isRecordingSupported ? "btn-color-black btn-all btn-enabled" : "btn-color-grey btn-all" }
-//             onClick={this.cancel}>
-//         Delete Recording
-//     </button>
-// </div>
-
-
-// <audio controls src={this.state.audioUrl}>
-//     Your browser does not support the <code>audio</code> element.
-// </audio>
-
-
-// <button type="button"
-//         disabled={!isRecordingSupported}
-//         className={ isRecordingSupported ? "btn-color-black btn-all btn-enabled" : "btn-color-grey btn-all" }
-//         onClick={this.playRecording}>
-//     <span className="glyphicon glyphicon-play"></span>
-// </button>
-
-// <div>
-//     <a href={this.state.audioUrl} download={"recorded-audio.webm"}>Download audio recording</a>
-// </div>

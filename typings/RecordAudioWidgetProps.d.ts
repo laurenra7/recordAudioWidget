@@ -12,10 +12,18 @@ export interface RecordAudioWidgetContainerProps {
     style?: CSSProperties;
     tabIndex: number;
     audioFileUrl: EditableValue<string>;
+    showInstructions: boolean;
+    saveLocation: string;
+    microflowCall: string;
+    entityName: string;
 }
 
 export interface RecordAudioWidgetPreviewProps {
     class: string;
     style: string;
     audioFileUrl: string;
+    showInstructions: boolean;
+    saveLocation: string;
+    microflowCall: string;
+    entityName: string;
 }

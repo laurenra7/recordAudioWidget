@@ -6,7 +6,7 @@
   "copyright": "2020 BYU",
   "author": "Lauren Anderson",
   "config": {
-    "projectPath": "../..//",
+    "projectPath": "C:\\Users\\jat0220\\Documents\\Mendix\\BYUEmergencyAlerts-jat0220_Audio_UI_Update",
     "mendixHost": "http://localhost:8080",
     "developmentPort": "3000"
   },
@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@jeltemx/mendix-react-widget-utils": "^0.7.0",
-    "classnames": "^2.2.6"
+    "classnames": "^2.2.6",
+    "mendix-client": "^7.15.8"
   }
 }

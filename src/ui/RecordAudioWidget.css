@@ -13,7 +13,7 @@ Place your custom CSS here
 
 .instructions {
     margin-top: 20px;
-    padding-top: 10px;
+    padding: 10px 0px 10px 0px;
     border: 1px solid rgb(204, 204, 204);
     background-color: lightyellow;
 }
@@ -23,7 +23,7 @@ Place your custom CSS here
 }
 
 .widget-record-audio {
-    width: 484px;
+    width: 100%;
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;

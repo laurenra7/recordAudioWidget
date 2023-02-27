@@ -7,12 +7,29 @@ Built to run on Mendix version 9.18.2
 - This widget can record audio using HTML MediaRecorder, 
 - Play the audio back to you
 - Download the .weba file of the audio 
-- *And pass the audio into your Mendix application*
+- *And pass the audio into your Mendix application as a System.FileDocument entity*
+
+## How to Modify the Widget
+Follow these step to modify the code of this widget and build your modifications to be usable:
+1. Clone this repository
+2. Navigate to the repository from the command-line
+3. Run `npm install` to download all the required node modules
+4. Navigate to `/src` and edit files as you need
+    - `RecordAudioWidget.xml` is where you can edit the pop-ip widget menu in Mendix Studio
+    - `/components/RecordAudio.tsx` is where you can edit the rendering and the primary code that runs the widget
+5. To build the app, return to your command-line focused on this project's home directory, and run `npm run build`
+6. This will build the widget .mpk file to the `/dist/1.0.0` directory
+   - *If you would like to change where the build saves the .mpk file, edit the "project path" on line 9 of `package.json`
+to your desired folder (i.e. your app widgets directory)* 
+
+
+
+
 
 ## Setting Up
 ### To add the widget to your project
 1. Download this repository
-2. Move the file `byu.RecordAudioWidget.mpk` to your Mendix application's `widgets` folder
+2. Move the file `byu.RecordAudioWidget.mpk` from `/dist/1.0.0.` to your Mendix application's `widgets` folder
 3. In Studio Pro, press F4 or navigate to App -> Synchronize App Directory, and click this option.
 
 ### Making the widget functional
